@@ -1,0 +1,27 @@
+steps:
+  # 1. Build the Docker image using the production Dockerfile
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-f'
+      - 'dockerfile.prod'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/auth-ms:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/auth-ms:latest'
+      - '.'
+
+  # 2. Push the Docker image to Google Container Registry (GCR)
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/auth-ms:$COMMIT_SHA'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/auth-ms:latest'
+
+# Force logs to Cloud Logging to fix the custom service account logging error
+options:
+  logging: CLOUD_LOGGING_ONLY
