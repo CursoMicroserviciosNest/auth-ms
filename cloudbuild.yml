@@ -1,0 +1,20 @@
+steps:
+  # 1. Build the Docker image using the production Dockerfile
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-t',
+        'northamerica-northeast1-docker.pkg.dev/microservices-dev-505620/image-registry/auth-ms',
+        '-f',
+        'dockerfile.prod',
+        '--platform=linux/amd64',
+        '.',
+      ]
+  # 2. Push the Docker image to Google Container Registry (GCR)
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'push',
+        'northamerica-northeast1-docker.pkg.dev/microservices-dev-505620/image-registry/auth-ms',
+      ]
